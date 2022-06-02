@@ -10,7 +10,7 @@ def get_current_date():
 current_date = get_current_date()
 
 
-def Calender(app):
+def CalenderUI(app):
     return Calendar(
         app,
         selectmode="day",
