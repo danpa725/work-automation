@@ -5,22 +5,31 @@ from load import load_dir
 from system import win_set_time
 from time import sleep
 
+CONFIG_DEFAULT = "DEFAULT"
 AUTO_CONFIG = {
-    "slected_date": "NOT",
-    "exceldir": "NOT",
+    "slected_date": CONFIG_DEFAULT,
+    "exceldir": CONFIG_DEFAULT,
+    "extract_column": CONFIG_DEFAULT
 }
+
+
+# def get_mouse_pos():
+#     print(win32gui.GetCursorPos())
+# get_mouse_pos()
 
 
 def init_automation():
     # config check
-    if AUTO_CONFIG["slected_date"] == "NOT":
+    if AUTO_CONFIG["slected_date"] == CONFIG_DEFAULT:
         show_slected_value(Label["app"], "날짜를 먼저 선택하세요")
         return
 
-    if AUTO_CONFIG["exceldir"] == "NOT":
+    if AUTO_CONFIG["exceldir"] == CONFIG_DEFAULT:
         show_slected_value(Label["app"], "파일을 먼저 선택하세요")
-
         return
+
+    if AUTO_CONFIG["extract_column"] == CONFIG_DEFAULT:
+        show_slected_value(Label["app"], "추출할 열을 입력하고 Enter 입력, (ex: A)")
 
     # set window date
     date = list(AUTO_CONFIG["slected_date"].replace(
@@ -31,23 +40,29 @@ def init_automation():
     sleep(2.5)
 
     # automation process
-    automation(exceldir=AUTO_CONFIG["exceldir"],
-               id_location="E", iter_time=1.75)
+    automation(
+        exceldir=AUTO_CONFIG["exceldir"],
+        id_location=AUTO_CONFIG["extract_column"],
+        iter_time=1.75)
 
     return
 
 
-def set_automation_config(config, slected_date="NOT", exceldir="NOT"):
-    if slected_date == "NOT":
-        config["exceldir"] = exceldir
-        return
-    if exceldir == "NOT":
+def set_automation_config(config: dict[str, str], slected_date: str = CONFIG_DEFAULT, exceldir: str = CONFIG_DEFAULT, extract_column: str = CONFIG_DEFAULT):
+    if slected_date != CONFIG_DEFAULT:
         config["slected_date"] = slected_date
         return
+    if exceldir != CONFIG_DEFAULT:
+        config["exceldir"] = exceldir
+        return
+    if extract_column != CONFIG_DEFAULT:
+        config["extract_column"] = extract_column
+        return
 
 
-def show_slected_value(label, value):
+def show_slected_value(label: Label, value: str):
     label.config(text=value)
+    return
 
 
 def set_slected_date():
@@ -68,6 +83,22 @@ def set_excel_dir():
     return
 
 
+def set_extract_column(event):
+    slected_colum = Input["extract_column"].get()[:1].capitalize()
+
+    if slected_colum == "":
+        show_slected_value(Label["extract_column"], f"적어도 한글자 이상 입력하세요")
+        return
+    if slected_colum.isalpha() == False:
+        show_slected_value(Label["extract_column"], f"알파벳 한글자를 입력하고 Enter 입력")
+        return
+
+    show_slected_value(Label["extract_column"], f"선택한 열: {slected_colum}")
+    set_automation_config(AUTO_CONFIG, extract_column=slected_colum)
+
+    return
+
+
 # -------------------------------- UI --------------------------------
 
 # App
@@ -81,7 +112,10 @@ App.resizable(True, True)
 Label = {
     "app": Label(App, text="식권 입력", padx=12, pady=10, relief="solid", borderwidth=2),
     "filedir": Label(App, text="A. 파일을 선택하세요", padx=5, pady=5),
-    "calendar": Label(App, text="B. 날짜를 선택하세요", padx=5, pady=5),
+    "extract_column": Label(App, text="B. 추출 열을 선택하세요", padx=5, pady=5),
+    "calendar": Label(App, text="C. 날짜를 선택하세요", padx=5, pady=5),
+
+
 }
 
 # Button
@@ -91,19 +125,34 @@ Button = {
     "automation": Button(App, command=init_automation, text="자동화 시작", padx=5, pady=5),
 }
 
+# Input
+Input = {
+    "extract_column": Entry(App)
+}
+
 # Calendar
 calendar = CalenderUI(App)
 
 # Add Component
 Label["app"].pack()
 
+# file
 Label["filedir"].pack()
 Button["file"].pack()
 
+# column
+Label["extract_column"].pack()
+Input["extract_column"].bind("<Return>", set_extract_column)
+Input["extract_column"].pack()
+
+# calendar
 Label["calendar"].pack()
 Button["date"].pack()
 
+# start btn
 Button["automation"].pack()
+
+# slect calendar
 calendar.pack(pady=10)
 
 # App initialize
