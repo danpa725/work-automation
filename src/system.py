@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-def win_set_time(time_tuple):
+def win_set_time(time_tuple: tuple):
     import win32api
 
     dayOfWeek = datetime(*time_tuple).isocalendar()[2]

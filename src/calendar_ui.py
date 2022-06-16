@@ -1,3 +1,4 @@
+from tkinter import Tk
 from tkcalendar import Calendar
 from datetime import date
 
@@ -10,7 +11,7 @@ def get_current_date():
 current_date = get_current_date()
 
 
-def CalenderUI(app):
+def CalenderUI(app: Tk):
     return Calendar(
         app,
         selectmode="day",
