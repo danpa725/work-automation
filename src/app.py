@@ -9,7 +9,7 @@ CONFIG_DEFAULT = "DEFAULT"
 AUTO_CONFIG = {
     "slected_date": CONFIG_DEFAULT,
     "exceldir": CONFIG_DEFAULT,
-    "extract_column": CONFIG_DEFAULT
+    "extract_column": CONFIG_DEFAULT,
 }
 
 
@@ -32,9 +32,8 @@ def init_automation():
         show_slected_value(Label["app"], "추출할 열을 입력하고 Enter 입력, (ex: A)")
 
     # set window date
-    date = list(AUTO_CONFIG["slected_date"].replace(
-        " ", "").strip().split("."))
-    date_tuple = (int(f'20{date[0]}'), int(date[1]), int(date[2]), 0, 0, 0, 0)
+    date = list(AUTO_CONFIG["slected_date"].replace(" ", "").strip().split("."))
+    date_tuple = (int(f"20{date[0]}"), int(date[1]), int(date[2]), 0, 0, 0, 0)
     win_set_time(date_tuple)
 
     sleep(2.5)
@@ -43,12 +42,18 @@ def init_automation():
     automation(
         exceldir=AUTO_CONFIG["exceldir"],
         id_location=AUTO_CONFIG["extract_column"],
-        iter_time=1.75)
+        iter_time=1.75,
+    )
 
     return
 
 
-def set_automation_config(config: dict[str, str], slected_date: str = CONFIG_DEFAULT, exceldir: str = CONFIG_DEFAULT, extract_column: str = CONFIG_DEFAULT):
+def set_automation_config(
+    config: dict[str, str],
+    slected_date: str = CONFIG_DEFAULT,
+    exceldir: str = CONFIG_DEFAULT,
+    extract_column: str = CONFIG_DEFAULT,
+):
     if slected_date != CONFIG_DEFAULT:
         config["slected_date"] = slected_date
         return
@@ -114,8 +119,6 @@ Label = {
     "filedir": Label(App, text="A. 파일을 선택하세요", padx=5, pady=5),
     "extract_column": Label(App, text="B. 추출 열을 선택하세요", padx=5, pady=5),
     "calendar": Label(App, text="C. 날짜를 선택하세요", padx=5, pady=5),
-
-
 }
 
 # Button
@@ -126,9 +129,7 @@ Button = {
 }
 
 # Input
-Input = {
-    "extract_column": Entry(App)
-}
+Input = {"extract_column": Entry(App)}
 
 # Calendar
 calendar = CalenderUI(App)

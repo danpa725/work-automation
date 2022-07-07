@@ -15,5 +15,6 @@ def get_column(directory: str, row_location: str):
         return column_data
     except:
         messagebox.showerror(
-            "error", "액셀 파일 데이터가 유효한지 확인하세요, 아이디는 XXXX-XXXXX 형식의 순수 문자열이어야 합니다.")
+            "error", "액셀 파일 데이터가 유효한지 확인하세요, 아이디는 XXXX-XXXXX 형식의 순수 문자열이어야 합니다."
+        )
         return

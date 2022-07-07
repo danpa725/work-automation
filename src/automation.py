@@ -5,9 +5,7 @@ from time import sleep
 from excel import get_column
 
 START_BUTTON_POS = {"x": 79, "y": 156}
-MAX_WINDOW_SIZE_POS = {
-    "x": 820, "y": 65
-}
+MAX_WINDOW_SIZE_POS = {"x": 820, "y": 65}
 INPUT_BUTTON_POS = {"x": 160, "y": 200}
 
 WINDOW_TITLE = "노인복지종합시스템PLUS"
@@ -33,7 +31,7 @@ def automation(exceldir: str, id_location: str, iter_time: int):
 
         # extract id list
         id_list = get_column(exceldir, id_location)
-        if(len(id_list) == 0):
+        if len(id_list) == 0:
             messagebox.showerror("error", "해당 열에 데이터가 없습니다.")
             return
 
@@ -52,9 +50,9 @@ def automation(exceldir: str, id_location: str, iter_time: int):
             pg.write(id)
 
             pg.press("enter")
-            
+
             sleep(0.5)
-            
+
             pg.press("esc")
 
             sleep(iter_time)
